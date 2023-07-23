@@ -28,15 +28,31 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
-  const [deleteCard, setDeleteCard] = React.useState("");
+  const [deleteCard, setDeleteCard] = React.useState({});
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isEmail, setIsEmail] = React.useState(null);
   const [popupImage, setPopupImage] = React.useState("");
   const [popupTitle, setPopupTitle] = React.useState("");
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard;
+
+  //обработчик ESC
+  React.useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
 
   // получить данные пользователя и начальные карточки
   React.useEffect(() => {
@@ -155,6 +171,7 @@ function App() {
     .then(() => {
       setPopupImage(registrationSuccess);
       setPopupTitle("Вы успешно зарегистрировались!");
+      handleInfoTooltip();
       navigate("/sign-in");
     })
     .catch(() => {

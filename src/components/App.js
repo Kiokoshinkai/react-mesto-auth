@@ -10,6 +10,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteConfirmationPopup from "./DeleteConfirmationPopup";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   //состояния кнопок попапов
@@ -115,18 +116,26 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header logo={headerLogo} />
-        <Main
-          onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
-          onEditProfile={() => setIsEditProfilePopupOpen(true)}
-          onAddPlace={() => setIsAddPlacePopupOpen(true)}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          onDeleteConfirmation={handleDeleteConfirmation}
-        />
-        <Footer />
+        <Routes>
+          <Route path="/sign-up" element={<Header />} />
+          <Route path="/sign-in" element={<Header />} />
+          <Route exact path="/" element={
+            <>
+            <Header logo={headerLogo} />
+            <Main
+              onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
+              onEditProfile={() => setIsEditProfilePopupOpen(true)}
+              onAddPlace={() => setIsAddPlacePopupOpen(true)}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              onDeleteConfirmation={handleDeleteConfirmation}
+            />
+            <Footer />
+            </>
+          } />
+        </Routes>
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
